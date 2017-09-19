@@ -13,13 +13,29 @@ namespace Pong
         SpriteBatch spriteBatch;
         Texture2D m_BarShape1;
         Texture2D m_BarShape2;
+        Texture2D m_BallShape;
         Bar m_Bar1;
         Bar m_Bar2;
         Ball m_Ball;
 
         public class Ball
-        {
-            int m_Vel = 0;
+        {            
+            int m_Size = 0;
+            Vector2 m_Vel = new Vector2(0, 0);
+            Vector2 m_Pos = new Vector2(0, 0);
+            public Ball(Vector2 Pos,int Size, Vector2 Vel) { m_Pos = Pos; m_Size = Size; m_Vel = Vel; }
+            public int GetSize() { return m_Size; }
+            public Vector2 GetPos() { return m_Pos; }
+            public void MoveVertical(int distance) { m_Pos.Y += distance; }
+            public void MoveHorizontal(int distance) { m_Pos.X += distance; }
+            public float GetPosY() { return m_Pos.Y; }
+            public float GetPosX() { return m_Pos.X; }
+            public float GetVelY() { return m_Vel.Y; }
+            public float GetVelX() { return m_Vel.X; }
+            public void SetPosX(float NewBallPosX) { m_Pos.X = NewBallPosX; }
+            public void SetPosY(float NewBallPosY) { m_Pos.Y = NewBallPosY; }
+            public void InverseVelX() { m_Vel.X *= -1; }
+            public void InverseVelY() { m_Vel.Y *= -1; }
         }
 
         public class Bar
@@ -74,16 +90,21 @@ namespace Pong
             // TODO: use this.Content to load your game content here
             m_Bar1 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
             m_Bar2 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
+            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2(100,100));
             m_Bar1.MoveVertical(-(m_Bar1.GetHeight()) / 2);
             m_Bar2.MoveVertical(-(m_Bar2.GetHeight()) / 2);
+            m_Ball.MoveVertical(-m_Ball.GetSize() / 2);
             m_Bar2.MoveHorizontal(graphics.GraphicsDevice.Viewport.Width-m_Bar2.GetWidth());
+            m_Ball.MoveHorizontal(-m_Ball.GetSize() / 2);
             //SpriteFont font = Content.Load<SpriteFont>("Score.spritefont");
             m_BarShape1 = new Texture2D(graphics.GraphicsDevice, m_Bar1.GetWidth(), m_Bar1.GetHeight());
             m_BarShape2 = new Texture2D(graphics.GraphicsDevice, m_Bar2.GetWidth(), m_Bar2.GetHeight());
+            m_BallShape = new Texture2D(graphics.GraphicsDevice, m_Ball.GetSize(), m_Ball.GetSize());
             Color[] data = new Color[80 * 30];
             for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
             m_BarShape1.SetData(data);
             m_BarShape2.SetData(data);
+            m_BallShape.SetData(data);
         }
 
         /// <summary>
@@ -108,8 +129,20 @@ namespace Pong
             // TODO: Add your update logic here
             float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float MovedBallPosX = m_Ball.GetPosX() + m_Ball.GetVelX() * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float MovedBallPosY = m_Ball.GetPosY() + m_Ball.GetVelY() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             m_Bar1.SetPos(MovedPos1);
             m_Bar2.SetPos(MovedPos2);
+            m_Ball.SetPosX(MovedBallPosX);
+            m_Ball.SetPosY(MovedBallPosY);
+            if (m_Ball.GetPosY() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Height && m_Ball.GetVelX() > 0)
+            {
+                m_Ball.InverseVelY();
+            }
+            else if ( m_Ball.GetPosY() < 0 && m_Ball.GetVelY() < 0)
+            {
+                m_Ball.InverseVelY();
+            }
             base.Update(gameTime);
         }
 
@@ -126,6 +159,7 @@ namespace Pong
             //spriteBatch.DrawString(font, "Score", new Vector2(100, 100), Color.Black);
             spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.White);
             spriteBatch.Draw(m_BarShape2, m_Bar2.GetPos(), Color.White);
+            spriteBatch.Draw(m_BallShape, m_Ball.GetPos(), Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }
