@@ -32,6 +32,8 @@ namespace Pong
             public void MoveVertical(int distance) { m_Pos.Y += distance; }
             public void MoveHorizontal(int distance) { m_Pos.X += distance; }
             public void SetPos(float NewPos) { m_Pos.Y = NewPos; }
+            public void StopUp() { m_Pos.Y = 0; }
+            public void StopDown() { m_Pos.Y = 330; } // hoogte van scherm maar graphics.GraphicsDevice werkt hier niet
         }
 
         public Game1()
@@ -100,7 +102,10 @@ namespace Pong
             if (Keystate.IsKeyDown(Keys.W)) { m_Bar1.MoveVertical(-10); }
             if (Keystate.IsKeyDown(Keys.Down)) { m_Bar2.MoveVertical(10); }
             if (Keystate.IsKeyDown(Keys.Up)) { m_Bar2.MoveVertical(-10); }
-            //if (m_Bar1.GetPosY() <= 0 || m_Bar1.GetPosY() + m_Bar1.GetHeight() >= graphics.GraphicsDevice.Viewport.Height) { m_Bar1.MoveVertical(0); }
+            if (m_Bar1.GetPosY() <= 0) { m_Bar1.StopUp(); }
+            if (m_Bar1.GetPosY() + m_Bar1.GetHeight() >= graphics.GraphicsDevice.Viewport.Height) { m_Bar1.StopDown(); }
+            if (m_Bar2.GetPosY() <= 0) { m_Bar2.StopUp(); }
+            if (m_Bar2.GetPosY() + m_Bar1.GetHeight() >= graphics.GraphicsDevice.Viewport.Height) { m_Bar2.StopDown(); }
             float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             m_Bar1.SetPos(MovedPos1);
