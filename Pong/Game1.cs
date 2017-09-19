@@ -11,6 +11,7 @@ namespace Pong
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont Font;
         Texture2D m_BarShape1;
         Texture2D m_BarShape2;
         Bar m_Bar1;
@@ -20,7 +21,7 @@ namespace Pong
         {
             int m_Height = 150;
             int m_Width = 10;
-            float m_Vel = 0;
+            float m_Vel = 100;
             Vector2 m_Pos = new Vector2(0, 0);
             public Bar(Vector2 Pos){ m_Pos = Pos; }
             public int GetHeight() { return m_Height; }
@@ -33,12 +34,6 @@ namespace Pong
             public void SetPos(float NewPos) { m_Pos.Y = NewPos; }
         }
 
-        public class SpriteFont
-        {
-            private SpriteFont font;
-            private int score = 0;
-        }
-        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -71,7 +66,7 @@ namespace Pong
             m_Bar1.MoveVertical(-(m_Bar1.GetHeight()) / 2);
             m_Bar2.MoveVertical(-(m_Bar2.GetHeight()) / 2);
             m_Bar2.MoveHorizontal(graphics.GraphicsDevice.Viewport.Width-m_Bar2.GetWidth());
-            //SpriteFont font = Content.Load<SpriteFont>("Score.spritefont");
+            Font = Content.Load<SpriteFont>("Score");
             m_BarShape1 = new Texture2D(graphics.GraphicsDevice, m_Bar1.GetWidth(), m_Bar1.GetHeight());
             m_BarShape2 = new Texture2D(graphics.GraphicsDevice, m_Bar2.GetWidth(), m_Bar2.GetHeight());
             Color[] data = new Color[80 * 30];
@@ -117,7 +112,7 @@ namespace Pong
             // TODO: Add your drawing code here
             // test
             spriteBatch.Begin();
-            //spriteBatch.DrawString(font, "Score", new Vector2(100, 100), Color.Black);
+            spriteBatch.DrawString(Font, "Test", new Vector2(graphics.GraphicsDevice.Viewport.Width/2, 100), Color.White);
             spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.White);
             spriteBatch.Draw(m_BarShape2, m_Bar2.GetPos(), Color.White);
             spriteBatch.End();
