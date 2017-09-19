@@ -115,6 +115,7 @@ namespace Pong
         {
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
+            // test
             spriteBatch.Begin();
             //spriteBatch.DrawString(font, "Score", new Vector2(100, 100), Color.Black);
             spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.White);
