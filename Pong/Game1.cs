@@ -21,7 +21,7 @@ namespace Pong
         {
             int m_Height = 150;
             int m_Width = 10;
-            float m_Vel = 100;
+            float m_Vel = 0;
             Vector2 m_Pos = new Vector2(0, 0);
             public Bar(Vector2 Pos){ m_Pos = Pos; }
             public int GetHeight() { return m_Height; }
@@ -95,6 +95,12 @@ namespace Pong
                 Exit();
 
             // TODO: Add your update logic here
+            KeyboardState Keystate = Keyboard.GetState();
+            if (Keystate.IsKeyDown(Keys.S)) { m_Bar1.MoveVertical(10); }
+            if (Keystate.IsKeyDown(Keys.W)) { m_Bar1.MoveVertical(-10); }
+            if (Keystate.IsKeyDown(Keys.Down)) { m_Bar2.MoveVertical(10); }
+            if (Keystate.IsKeyDown(Keys.Up)) { m_Bar2.MoveVertical(-10); }
+            //if (m_Bar1.GetPosY() <= 0 || m_Bar1.GetPosY() + m_Bar1.GetHeight() >= graphics.GraphicsDevice.Viewport.Height) { m_Bar1.MoveVertical(0); }
             float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             m_Bar1.SetPos(MovedPos1);
