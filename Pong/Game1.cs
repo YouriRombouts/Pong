@@ -15,6 +15,12 @@ namespace Pong
         Texture2D m_BarShape2;
         Bar m_Bar1;
         Bar m_Bar2;
+        Ball m_Ball;
+
+        public class Ball
+        {
+            int m_Vel = 0;
+        }
 
         public class Bar
         {
