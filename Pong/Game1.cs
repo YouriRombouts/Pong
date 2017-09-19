@@ -103,6 +103,7 @@ namespace Pong
             float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             m_Bar1.SetPos(MovedPos1);
+            m_Bar2.SetPos(MovedPos2);
             base.Update(gameTime);
         }
 
