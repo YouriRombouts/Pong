@@ -240,3 +240,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Pong/Game1 (Youri Rombouts's conflicted copy 2017-09-19).cs

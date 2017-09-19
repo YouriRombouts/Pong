@@ -11,21 +11,31 @@ namespace Pong
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D m_BarShape1;
+        Texture2D m_BarShape2;
+        Bar m_Bar1;
+        Bar m_Bar2;
 
         public class Bar
         {
-            int m_Height = 100;
+            int m_Height = 150;
             int m_Width = 10;
-            int m_Vel = 0;
+            float m_Vel = 0;
             Vector2 m_Pos = new Vector2(0, 0);
             public Bar(Vector2 Pos){ m_Pos = Pos; }
             public int GetHeight() { return m_Height; }
             public int GetWidth() { return m_Width; }
+            public float GetVel() { return m_Vel; }
+            public Vector2 GetPos() { return m_Pos; }
+            public float GetPosY() { return m_Pos.Y; }
+            public void MoveVertical(int distance) { m_Pos.Y += distance; }
+            public void MoveHorizontal(int distance) { m_Pos.X += distance; }
+            public void SetPos(float NewPos) { m_Pos.Y = NewPos; }
         }
 
         public class SpriteFont
         {
-            public SpriteFont font;
+            private SpriteFont font;
             private int score = 0;
         }
         
@@ -56,12 +66,18 @@ namespace Pong
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-            //Bar Bar1 = new Bar(0, (graphics.GraphicsDevice.Viewport.Height / 2));
-            SpriteFont font = Content.Load<SpriteFont>("Score.spritefont");
-            Texture2D BarShape = new Texture2D(graphics.GraphicsDevice, 10, 100);
+            m_Bar1 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
+            m_Bar2 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
+            m_Bar1.MoveVertical(-(m_Bar1.GetHeight()) / 2);
+            m_Bar2.MoveVertical(-(m_Bar2.GetHeight()) / 2);
+            m_Bar2.MoveHorizontal(graphics.GraphicsDevice.Viewport.Width-m_Bar2.GetWidth());
+            //SpriteFont font = Content.Load<SpriteFont>("Score.spritefont");
+            m_BarShape1 = new Texture2D(graphics.GraphicsDevice, m_Bar1.GetWidth(), m_Bar1.GetHeight());
+            m_BarShape2 = new Texture2D(graphics.GraphicsDevice, m_Bar2.GetWidth(), m_Bar2.GetHeight());
             Color[] data = new Color[80 * 30];
             for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
-            BarShape.SetData(data);
+            m_BarShape1.SetData(data);
+            m_BarShape2.SetData(data);
         }
 
         /// <summary>
@@ -84,7 +100,9 @@ namespace Pong
                 Exit();
 
             // TODO: Add your update logic here
-
+            float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            m_Bar1.SetPos(MovedPos1);
             base.Update(gameTime);
         }
 
@@ -95,11 +113,11 @@ namespace Pong
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             //spriteBatch.DrawString(font, "Score", new Vector2(100, 100), Color.Black);
-            spriteBatch.Draw(BarShape, Bar1.Pos, Color.White);
+            spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.White);
+            spriteBatch.Draw(m_BarShape2, m_Bar2.GetPos(), Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }
