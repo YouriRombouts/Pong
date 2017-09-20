@@ -119,12 +119,12 @@ namespace Pong
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.LightGreen);
             // TODO: Add your drawing code here
             // test
             spriteBatch.Begin();
             spriteBatch.DrawString(Font, "Test", new Vector2(graphics.GraphicsDevice.Viewport.Width/2, 100), Color.White);
-            spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.White);
+            spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.Red);
             spriteBatch.Draw(m_BarShape2, m_Bar2.GetPos(), Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
