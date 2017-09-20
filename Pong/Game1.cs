@@ -129,7 +129,10 @@ namespace Pong
 
             // TODO: Add your update logic here
             KeyboardState Keystate = Keyboard.GetState();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 104765958a3e189acccbf9f40a5916732a5ae82c
             if (Keyboard.GetState().IsKeyDown(Keys.S)) { m_Bar1.SetVel(m_Bar1.GetMaxVel()); }
             if (Keyboard.GetState().IsKeyDown(Keys.W)) { m_Bar1.SetVel(-m_Bar1.GetMaxVel()); }
             if (Keystate.IsKeyDown(Keys.Down)) { m_Bar2.SetVel(m_Bar2.GetMaxVel()); }
@@ -139,6 +142,17 @@ namespace Pong
             if (m_Bar2.GetPosY() <= 0 && m_Bar2.GetVel() < 0 || Keyboard.GetState().IsKeyUp(Keys.Down) && m_Bar2.GetVel() > 0) { m_Bar2.SetVel(0); }
             if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar2.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.Up) && m_Bar2.GetVel() < 0) { m_Bar2.SetVel(0); }
 
+<<<<<<< HEAD
+=======
+            //if (Keystate.IsKeyDown(Keys.S) && m_Bar1.GetPosY() <= (graphics.GraphicsDevice.Viewport.Height - m_Bar1.GetHeight())) { m_Bar1.MoveVertical(10); } 
+            //if (Keystate.IsKeyDown(Keys.W)) { m_Bar1.MoveVertical(-10); }
+            //if (Keystate.IsKeyDown(Keys.Down)) { m_Bar2.MoveVertical(10); }
+            //if (Keystate.IsKeyDown(Keys.Up)) { m_Bar2.MoveVertical(-10); }
+            //if (m_Bar1.GetPosY() <= 0) { m_Bar1.StopUp(); }
+            //if (m_Bar1.GetPosY() + m_Bar1.GetHeight() >= graphics.GraphicsDevice.Viewport.Height) { m_Bar1.StopDown(); }
+            //if (m_Bar2.GetPosY() <= 0) { m_Bar2.StopUp(); }
+            //if (m_Bar2.GetPosY() + m_Bar1.GetHeight() >= graphics.GraphicsDevice.Viewport.Height) { m_Bar2.StopDown(); }
+>>>>>>> 104765958a3e189acccbf9f40a5916732a5ae82c
             float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedBallPosX = m_Ball.GetPosX() + m_Ball.GetVelX() * (float)gameTime.ElapsedGameTime.TotalSeconds;
