@@ -88,7 +88,7 @@ namespace Pong
             // TODO: use this.Content to load your game content here
             m_Bar1 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
             m_Bar2 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
-            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2(100,100));
+            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2(-100,100));
             m_Bar1.MoveVertical(-(m_Bar1.GetHeight()) / 2);
             m_Bar2.MoveVertical(-(m_Bar2.GetHeight()) / 2);
             m_Ball.MoveVertical(-m_Ball.GetSize() / 2);
@@ -139,24 +139,28 @@ namespace Pong
             if (m_Bar2.GetPosY() <= 0 && m_Bar2.GetVel() < 0 || Keyboard.GetState().IsKeyUp(Keys.Down) && m_Bar2.GetVel() > 0) { m_Bar2.SetVel(0); }
             if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar2.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.Up) && m_Bar2.GetVel() < 0) { m_Bar2.SetVel(0); }
 
-            //if (Keystate.IsKeyDown(Keys.S) && m_Bar1.GetPosY() <= (graphics.GraphicsDevice.Viewport.Height - m_Bar1.GetHeight())) { m_Bar1.MoveVertical(10); } 
-            //if (Keystate.IsKeyDown(Keys.W)) { m_Bar1.MoveVertical(-10); }
-            //if (Keystate.IsKeyDown(Keys.Down)) { m_Bar2.MoveVertical(10); }
-            //if (Keystate.IsKeyDown(Keys.Up)) { m_Bar2.MoveVertical(-10); }
-            //if (m_Bar1.GetPosY() <= 0) { m_Bar1.StopUp(); }
-            //if (m_Bar1.GetPosY() + m_Bar1.GetHeight() >= graphics.GraphicsDevice.Viewport.Height) { m_Bar1.StopDown(); }
-            //if (m_Bar2.GetPosY() <= 0) { m_Bar2.StopUp(); }
-            //if (m_Bar2.GetPosY() + m_Bar1.GetHeight() >= graphics.GraphicsDevice.Viewport.Height) { m_Bar2.StopDown(); }
+            
+
+            if (m_Bar1.GetPosY() + m_Bar1.GetHeight() >= m_Ball.GetPosY() + m_Ball.GetSize()/2 && m_Ball.GetPosY() + m_Ball.GetSize()/2 >= m_Bar1.GetPosY() &&  m_Bar1.GetWidth() >= m_Ball.GetPosX())
+            {
+                m_Ball.InverseVelX();
+            }
+            if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 >= m_Bar2.GetPosY() && graphics.GraphicsDevice.Viewport.Width - m_Bar1.GetWidth() <= m_Ball.GetPosX() + m_Ball.GetSize())
+            {
+                m_Ball.InverseVelX();
+            }
 
             float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedBallPosX = m_Ball.GetPosX() + m_Ball.GetVelX() * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float MovedBallPosY = m_Ball.GetPosY() + m_Ball.GetVelY() * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             m_Bar1.SetPos(MovedPos1);
             m_Bar2.SetPos(MovedPos2);
             m_Ball.SetPosX(MovedBallPosX);
             m_Ball.SetPosY(MovedBallPosY);
-            if (m_Ball.GetPosY() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Height && m_Ball.GetVelX() > 0)
+
+            if (m_Ball.GetPosY() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Height)
             {
                 m_Ball.InverseVelY();
             }
