@@ -19,3 +19,9 @@
 /processorParam:TextureFormat=Compressed
 /build:Score.spritefont
 
+#begin BeepBox-Song loop.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:BeepBox-Song loop.mp3
+

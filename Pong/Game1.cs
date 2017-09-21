@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace Pong
 {
@@ -18,6 +20,8 @@ namespace Pong
         Bar m_Bar1;
         Bar m_Bar2;
         Ball m_Ball;
+        Song Music;
+        SoundEffectInstance soundEffectInstance;
 
         public class Ball
         {            
@@ -106,6 +110,10 @@ namespace Pong
             m_BarShape1.SetData(data);
             m_BarShape2.SetData(data);
             m_BallShape.SetData(data);
+
+            Music = Content.Load<Song>("BeepBox-Song loop");
+            MediaPlayer.Play(Music);
+            MediaPlayer.IsRepeating = true;
         }
 
         /// <summary>
