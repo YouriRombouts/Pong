@@ -18,11 +18,13 @@ namespace Pong
         Texture2D m_BarShape1;
         Texture2D m_BarShape2;
         Texture2D m_BallShape;
+        Texture2D Heart;
         Bar m_Bar1;
         Bar m_Bar2;
         Ball m_Ball;
         Song Music;
         Button PlayButton;
+
 
         public class Ball
         {            
@@ -118,6 +120,8 @@ namespace Pong
 
         }
 
+        
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -166,14 +170,18 @@ namespace Pong
             m_BarShape2.SetData(data);
             m_BallShape.SetData(data);
 
+            Texture2D Heart = Content.Load<Texture2D>("Heart");
+
             Music = Content.Load<Song>("BeepBox-Song loop");
             MediaPlayer.Play(Music);
             MediaPlayer.IsRepeating = true;
 
             IsMouseVisible = true;
             PlayButton = new Button(Content.Load<Texture2D>("Play") , graphics.GraphicsDevice);
-            PlayButton.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2 ));
-        }
+            PlayButton.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2 ));
+
+            //public bool Intersects(BoundingBox kaas);
+    }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -212,9 +220,9 @@ namespace Pong
                     if (m_Bar1.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar1.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.W) && m_Bar1.GetVel() < 0) { m_Bar1.SetVel(0); }
                     if (m_Bar2.GetPosY() <= 0 && m_Bar2.GetVel() < 0 || Keyboard.GetState().IsKeyUp(Keys.Down) && m_Bar2.GetVel() > 0) { m_Bar2.SetVel(0); }
                     if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar2.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.Up) && m_Bar2.GetVel() < 0) { m_Bar2.SetVel(0); }
-                    if (m_Ball.GetPosX() <= m_Bar1.GetWidth() || m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width + m_Ball.GetSize() - m_Bar2.GetWidth())
+                    if (m_Ball.GetPosX() <= m_Bar1.GetWidth() || m_Ball.GetPosX() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth())
                     {
-                        if (m_Bar1.GetPosY() + m_Bar1.GetHeight() >= m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 >= m_Bar1.GetPosY())
+                        if (m_Bar1.GetPosY() + m_Bar1.GetHeight() >= m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 >= m_Bar1.GetPosY()) /*(m_Ball.Intersects(m_Bar1))*/
                         {
                             m_Ball.InverseVelX();
                         }
