@@ -212,17 +212,17 @@ namespace Pong
                     if (m_Bar1.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar1.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.W) && m_Bar1.GetVel() < 0) { m_Bar1.SetVel(0); }
                     if (m_Bar2.GetPosY() <= 0 && m_Bar2.GetVel() < 0 || Keyboard.GetState().IsKeyUp(Keys.Down) && m_Bar2.GetVel() > 0) { m_Bar2.SetVel(0); }
                     if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar2.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.Up) && m_Bar2.GetVel() < 0) { m_Bar2.SetVel(0); }
-
-
-
-                    if (m_Bar1.GetPosY() + m_Bar1.GetHeight() >= m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 >= m_Bar1.GetPosY() && m_Bar1.GetWidth() >= m_Ball.GetPosX())
+                    if (m_Ball.GetPosX() <= m_Bar1.GetWidth() || m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width + m_Ball.GetSize() - m_Bar2.GetWidth())
                     {
-                        m_Ball.InverseVelX();
-                    }
-                    if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 >= m_Bar2.GetPosY() && graphics.GraphicsDevice.Viewport.Width - m_Bar1.GetWidth() <= m_Ball.GetPosX() + m_Ball.GetSize())
-                    {
-                        m_Ball.InverseVelX();
-                    }
+                        if (m_Bar1.GetPosY() + m_Bar1.GetHeight() >= m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 >= m_Bar1.GetPosY())
+                        {
+                            m_Ball.InverseVelX();
+                        }
+                        if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 >= m_Bar2.GetPosY())
+                        {
+                            m_Ball.InverseVelX();
+                        }                       
+                    }                
 
                     float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
