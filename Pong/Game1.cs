@@ -36,6 +36,7 @@ namespace Pong
             public Ball(Vector2 Pos,int Size, Vector2 Vel) { m_Pos = Pos; m_Size = Size; m_Vel = Vel; }
             public int GetSize() { return m_Size; }
             public Vector2 GetPos() { return m_Pos; }
+            public int GetMidPos() { return (int)m_Pos.Y + m_Size/2; }
             public void MoveVertical(int distance) { m_Pos.Y += distance; }
             public void MoveHorizontal(int distance) { m_Pos.X += distance; }
             public float GetPosY() { return m_Pos.Y; }
@@ -234,38 +235,41 @@ namespace Pong
                     if (m_Bar1.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar1.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.W) && m_Bar1.GetVel() < 0) { m_Bar1.SetVel(0); }
                     if (m_Bar2.GetPosY() <= 0 && m_Bar2.GetVel() < 0 || Keyboard.GetState().IsKeyUp(Keys.Down) && m_Bar2.GetVel() > 0) { m_Bar2.SetVel(0); }
                     if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar2.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.Up) && m_Bar2.GetVel() < 0) { m_Bar2.SetVel(0); }
-                    if (m_Ball.GetPosX() <= m_Bar1.GetWidth() || m_Ball.GetPosX() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth())
+                    if (m_Ball.GetPosX() <= m_Bar1.GetWidth())
                     {
-                        if (m_Bar1.GetPosY() + m_Bar1.GetHeight() > m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 > m_Bar1.GetPosY())
+                        if (m_Ball.GetMidPos() <= m_Bar1.GetPosY() + m_Bar1.GetHeight() && m_Ball.GetMidPos() >= m_Bar1.GetPosY())
                         {
                             m_Ball.InverseVelX();
                         }
-                        if (m_Bar2.GetPosY() + m_Bar2.GetHeight() > m_Ball.GetPosY() + m_Ball.GetSize() / 2 && m_Ball.GetPosY() + m_Ball.GetSize() / 2 > m_Bar2.GetPosY())
+                    }
+                    if (m_Ball.GetPosX() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth())
+                    {
+                        if (m_Ball.GetMidPos() <= m_Bar2.GetPosY() + m_Bar2.GetHeight() && m_Ball.GetMidPos() >= m_Bar2.GetPosY())
                         {
                             m_Ball.InverseVelX();
                         }
+                    }
                     else if (m_Ball.GetPosX() <= 0)
+                    {
+                        m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
+                        m_Ball.SetVelX(-100);
+                        m_Lives1.RemoveOne();
+                        if (m_Lives1.GetLivesInt() == 0)
                         {
-                            //remove 1 life and redraw ball
-                            m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                            m_Ball.SetVelX(-100);
-                            m_Lives1.RemoveOne();
-                            if (m_Lives1.GetLivesInt() == 0)
-                            {
-                                CurrentGameState = Gamestate.GameOver;
-                            }
-                        }                       
+                            CurrentGameState = Gamestate.GameOver;
+                        }
+                    }
                     else if (m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width)
+                    {
+                        m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
+                        m_Ball.SetVelX(100);
+                        m_Lives2.RemoveOne();
+                        if (m_Lives2.GetLivesInt() == 0)
                         {
-                            m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                            m_Ball.SetVelX(100);
-                            m_Lives2.RemoveOne();
-                            if (m_Lives2.GetLivesInt() == 0)
-                            {
-                                CurrentGameState = Gamestate.GameOver;
-                            }
-                        }                 
-                    }                
+                            CurrentGameState = Gamestate.GameOver;
+                        }
+                    }                 
+                                    
 
                     float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -316,6 +320,8 @@ namespace Pong
                     spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.Red);
                     spriteBatch.Draw(m_BarShape2, m_Bar2.GetPos(), Color.White);
                     spriteBatch.Draw(m_BallShape, m_Ball.GetPos(), Color.White);
+                    break;
+                case Gamestate.GameOver:
                     break;
             }
             spriteBatch.End();
