@@ -18,7 +18,6 @@ namespace Pong
         Texture2D m_BarShape1;
         Texture2D m_BarShape2;
         Texture2D m_BallShape;
-        Texture2D Heart;
         Bar m_Bar1;
         Bar m_Bar2;
         Lives m_Lives1;
@@ -26,7 +25,10 @@ namespace Pong
         Ball m_Ball;
         Song Music;
         Button PlayButton;
-
+        SoundEffect Ping;
+        SoundEffect Pong;
+        SoundEffect Pang2;
+        string Winner;
 
         public class Ball
         {            
@@ -164,7 +166,7 @@ namespace Pong
             // TODO: use this.Content to load your game content here
             m_Bar1 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
             m_Bar2 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
-            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2(-100,100));
+            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2(-150,100));
             m_Lives1 = new Lives();
             m_Lives2 = new Lives();
             m_Bar1.MoveVertical(-(m_Bar1.GetHeight()) / 2);
@@ -195,8 +197,11 @@ namespace Pong
             PlayButton = new Button(Content.Load<Texture2D>("Play") , graphics.GraphicsDevice);
             PlayButton.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2 ));
 
+            Ping = Content.Load<SoundEffect>("ping");
+            Pong = Content.Load<SoundEffect>("pong");
+            Pang2 = Content.Load<SoundEffect>("pang2");
             //public bool Intersects(BoundingBox kaas);
-    }
+        }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -240,16 +245,18 @@ namespace Pong
                         if (m_Ball.GetMidPos() <= m_Bar1.GetPosY() + m_Bar1.GetHeight() && m_Ball.GetMidPos() >= m_Bar1.GetPosY())
                         {
                             m_Ball.InverseVelX();
+                            Ping.Play();
                         }
                         else
                         {
                             if (m_Ball.GetPosX() <= -m_Ball.GetSize())
                             { 
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                                m_Ball.SetVelX(-100);
+                                m_Ball.SetVelX(-150);
                                 m_Lives1.RemoveOne();
                                 if (m_Lives1.GetLivesInt() == 0)
                                 {
+                                    string Winner = "Player 2";
                                     CurrentGameState = Gamestate.GameOver;
                                 }   
                             }
@@ -260,16 +267,18 @@ namespace Pong
                         if (m_Ball.GetMidPos() <= m_Bar2.GetPosY() + m_Bar2.GetHeight() && m_Ball.GetMidPos() >= m_Bar2.GetPosY())
                         {
                             m_Ball.InverseVelX();
+                            Pong.Play();
                         }
                         else
                         {
                             if (m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width)
                             {
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                                m_Ball.SetVelX(100);
+                                //m_Ball.SetVelX(150);
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
                                 {
+                                    string Winner = "Player 1";
                                     CurrentGameState = Gamestate.GameOver;
                                 }
                             }
@@ -289,14 +298,16 @@ namespace Pong
                     if (m_Ball.GetPosY() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Height)
                     {
                         m_Ball.InverseVelY();
+                        Pang2.Play();
+
                     }
                     else if (m_Ball.GetPosY() < 0 && m_Ball.GetVelY() < 0)
                     {
                         m_Ball.InverseVelY();
+                        Pang2.Play();
                     }
                     break;
                 case Gamestate.GameOver:
-                    
                     break;
             }
 
@@ -320,13 +331,15 @@ namespace Pong
                     break;
                 case Gamestate.Playing: 
                     GraphicsDevice.Clear(Color.Black);
-                    spriteBatch.DrawString(Font, m_Lives1.GetLivesStr(), new Vector2(graphics.GraphicsDevice.Viewport.Width / 4, 50), Color.Black);
-                    spriteBatch.DrawString(Font, m_Lives2.GetLivesStr(), new Vector2(3*(graphics.GraphicsDevice.Viewport.Width / 4), 50), Color.Black);
+                    spriteBatch.DrawString(Font, m_Lives1.GetLivesStr(), new Vector2(graphics.GraphicsDevice.Viewport.Width / 4, 50), Color.White);
+                    spriteBatch.DrawString(Font, m_Lives2.GetLivesStr(), new Vector2(3*(graphics.GraphicsDevice.Viewport.Width / 4), 50), Color.White);
                     spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.White);
                     spriteBatch.Draw(m_BarShape2, m_Bar2.GetPos(), Color.White);
                     spriteBatch.Draw(m_BallShape, m_Ball.GetPos(), Color.White);
                     break;
                 case Gamestate.GameOver:
+                    GraphicsDevice.Clear(Color.Red);
+                    spriteBatch.DrawString(Font, "The winner is: " + Winner, new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), Color.Green);
                     break;
             }
             spriteBatch.End();

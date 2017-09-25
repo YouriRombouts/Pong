@@ -61,3 +61,21 @@
 /processorParam:TextureFormat=Color
 /build:Heart.png
 
+#begin ping.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:ping.wav
+
+#begin pong.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:pong.wav
+
+#begin pang2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:pang2.wav
+
