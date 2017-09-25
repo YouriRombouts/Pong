@@ -241,6 +241,16 @@ namespace Pong
                         {
                             m_Ball.InverseVelX();
                         }
+                        else
+                        {
+                            m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
+                            m_Ball.SetVelX(-100);
+                            m_Lives1.RemoveOne();
+                            if (m_Lives1.GetLivesInt() == 0)
+                            {
+                                CurrentGameState = Gamestate.GameOver;
+                            }
+                        }
                     }
                     if (m_Ball.GetPosX() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth())
                     {
@@ -248,28 +258,17 @@ namespace Pong
                         {
                             m_Ball.InverseVelX();
                         }
-                    }
-                    else if (m_Ball.GetPosX() <= 0)
-                    {
-                        m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                        m_Ball.SetVelX(-100);
-                        m_Lives1.RemoveOne();
-                        if (m_Lives1.GetLivesInt() == 0)
+                        else
                         {
-                            CurrentGameState = Gamestate.GameOver;
-                        }
-                    }
-                    else if (m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width)
-                    {
-                        m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                        m_Ball.SetVelX(100);
-                        m_Lives2.RemoveOne();
-                        if (m_Lives2.GetLivesInt() == 0)
-                        {
-                            CurrentGameState = Gamestate.GameOver;
-                        }
-                    }                 
-                                    
+                            m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
+                            m_Ball.SetVelX(100);
+                            m_Lives2.RemoveOne();
+                            if (m_Lives2.GetLivesInt() == 0)
+                            {
+                                CurrentGameState = Gamestate.GameOver;
+                            }
+                        }                     
+                    }                                                                
 
                     float MovedPos1 = m_Bar1.GetPosY() + m_Bar1.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     float MovedPos2 = m_Bar2.GetPosY() + m_Bar2.GetVel() * (float)gameTime.ElapsedGameTime.TotalSeconds;
