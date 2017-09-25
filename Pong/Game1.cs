@@ -15,13 +15,17 @@ namespace Pong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont Font;
-        Texture2D m_BarShape1, m_BarShape2, m_BallShape;
-        Bar m_Bar1, m_Bar2;
-        Lives m_Lives1, m_Lives2;
+        Texture2D m_BarShape1;
+        Texture2D m_BarShape2;
+        Texture2D m_BallShape;
+        Texture2D Heart;
+        Bar m_Bar1;
+        Bar m_Bar2;
+        Lives m_Lives1;
+        Lives m_Lives2;
         Ball m_Ball;
         Song Music;
         Button PlayButton;
-        int ScreenWidth, ScreenHeight;
 
 
         public class Ball
@@ -158,20 +162,18 @@ namespace Pong
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-            int ScreenWidth = graphics.GraphicsDevice.Viewport.Width;
-            int ScreenHeight = graphics.GraphicsDevice.Viewport.Height;
-            m_Bar1 = new Bar(new Vector2(0, (ScreenHeight / 2)));
-            m_Bar2 = new Bar(new Vector2(0, (ScreenHeight / 2)));
-            m_Ball = new Ball(new Vector2((ScreenWidth / 2), (ScreenHeight / 2)), 10, new Vector2(-100,100));
+            m_Bar1 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
+            m_Bar2 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
+            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2(-100,100));
             m_Lives1 = new Lives();
             m_Lives2 = new Lives();
             m_Bar1.MoveVertical(-(m_Bar1.GetHeight()) / 2);
             m_Bar2.MoveVertical(-(m_Bar2.GetHeight()) / 2);
             m_Ball.MoveVertical(-m_Ball.GetSize() / 2);
-            m_Bar2.MoveHorizontal(ScreenWidth-m_Bar2.GetWidth());            
+            m_Bar2.MoveHorizontal(graphics.GraphicsDevice.Viewport.Width-m_Bar2.GetWidth());
+
             Font = Content.Load<SpriteFont>("Score");
             m_Ball.MoveHorizontal(-m_Ball.GetSize() / 2);
-            
             //SpriteFont font = Content.Load<SpriteFont>("Score.spritefont");
 
             m_BarShape1 = new Texture2D(graphics.GraphicsDevice, m_Bar1.GetWidth(), m_Bar1.GetHeight());
@@ -191,8 +193,9 @@ namespace Pong
 
             IsMouseVisible = true;
             PlayButton = new Button(Content.Load<Texture2D>("Play") , graphics.GraphicsDevice);
-            PlayButton.SetPostion(new Vector2(ScreenWidth / 2 - ScreenWidth / 16, ScreenHeight / 2 ));
+            PlayButton.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2 ));
 
+            //public bool Intersects(BoundingBox kaas);
     }
 
         /// <summary>
@@ -229,9 +232,9 @@ namespace Pong
                     if (Keystate.IsKeyDown(Keys.Down)) { m_Bar2.SetVel(m_Bar2.GetMaxVel()); }
                     if (Keystate.IsKeyDown(Keys.Up)) { m_Bar2.SetVel(-m_Bar2.GetMaxVel()); }
                     if (m_Bar1.GetPosY() <= 0 && m_Bar1.GetVel() < 0 || Keyboard.GetState().IsKeyUp(Keys.S) && m_Bar1.GetVel() > 0) { m_Bar1.SetVel(0); }
-                    if (m_Bar1.GetPosY() + m_Bar2.GetHeight() >= ScreenHeight && m_Bar1.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.W) && m_Bar1.GetVel() < 0) { m_Bar1.SetVel(0); }
+                    if (m_Bar1.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar1.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.W) && m_Bar1.GetVel() < 0) { m_Bar1.SetVel(0); }
                     if (m_Bar2.GetPosY() <= 0 && m_Bar2.GetVel() < 0 || Keyboard.GetState().IsKeyUp(Keys.Down) && m_Bar2.GetVel() > 0) { m_Bar2.SetVel(0); }
-                    if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= ScreenHeight && m_Bar2.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.Up) && m_Bar2.GetVel() < 0) { m_Bar2.SetVel(0); }
+                    if (m_Bar2.GetPosY() + m_Bar2.GetHeight() >= graphics.GraphicsDevice.Viewport.Height && m_Bar2.GetVel() > 0 || Keyboard.GetState().IsKeyUp(Keys.Up) && m_Bar2.GetVel() < 0) { m_Bar2.SetVel(0); }
                     if (m_Ball.GetPosX() <= m_Bar1.GetWidth())
                     {
                         if (m_Ball.GetMidPos() <= m_Bar1.GetPosY() + m_Bar1.GetHeight() && m_Ball.GetMidPos() >= m_Bar1.GetPosY())
@@ -242,7 +245,7 @@ namespace Pong
                         {
                             if (m_Ball.GetPosX() <= -m_Ball.GetSize())
                             { 
-                                m_Ball.SetPos(new Vector2((ScreenWidth / 2), (ScreenHeight / 2)));
+                                m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
                                 m_Ball.SetVelX(-100);
                                 m_Lives1.RemoveOne();
                                 if (m_Lives1.GetLivesInt() == 0)
@@ -252,7 +255,7 @@ namespace Pong
                             }
                         }
                     }
-                    if (m_Ball.GetPosX() + m_Ball.GetSize() >= ScreenWidth - m_Bar2.GetWidth())
+                    if (m_Ball.GetPosX() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth())
                     {
                         if (m_Ball.GetMidPos() <= m_Bar2.GetPosY() + m_Bar2.GetHeight() && m_Ball.GetMidPos() >= m_Bar2.GetPosY())
                         {
@@ -260,9 +263,9 @@ namespace Pong
                         }
                         else
                         {
-                            if (m_Ball.GetPosX() >= ScreenWidth)
+                            if (m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width)
                             {
-                                m_Ball.SetPos(new Vector2((ScreenWidth / 2), (ScreenHeight / 2)));
+                                m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
                                 m_Ball.SetVelX(100);
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
@@ -283,7 +286,7 @@ namespace Pong
                     m_Ball.SetPosX(MovedBallPosX);
                     m_Ball.SetPosY(MovedBallPosY);
 
-                    if (m_Ball.GetPosY() + m_Ball.GetSize() >= ScreenHeight)
+                    if (m_Ball.GetPosY() + m_Ball.GetSize() >= graphics.GraphicsDevice.Viewport.Height)
                     {
                         m_Ball.InverseVelY();
                     }
@@ -312,13 +315,13 @@ namespace Pong
             switch (CurrentGameState)
             {
                 case Gamestate.MainMenu:
-                    spriteBatch.Draw(Content.Load<Texture2D>("Menu"), new Rectangle(0, 0, ScreenWidth, ScreenHeight) , Color.White);
+                    spriteBatch.Draw(Content.Load<Texture2D>("Menu"), new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height) , Color.White);
                     PlayButton.Draw(spriteBatch);   
                     break;
                 case Gamestate.Playing: 
                     GraphicsDevice.Clear(Color.LightGreen);
-                    spriteBatch.DrawString(Font, m_Lives1.GetLivesStr(), new Vector2(ScreenWidth / 4, 50), Color.Black);
-                    spriteBatch.DrawString(Font, m_Lives2.GetLivesStr(), new Vector2(3*(ScreenWidth / 4), 50), Color.Black);
+                    spriteBatch.DrawString(Font, m_Lives1.GetLivesStr(), new Vector2(graphics.GraphicsDevice.Viewport.Width / 4, 50), Color.Black);
+                    spriteBatch.DrawString(Font, m_Lives2.GetLivesStr(), new Vector2(3*(graphics.GraphicsDevice.Viewport.Width / 4), 50), Color.Black);
                     spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.Red);
                     spriteBatch.Draw(m_BarShape2, m_Bar2.GetPos(), Color.White);
                     spriteBatch.Draw(m_BallShape, m_Ball.GetPos(), Color.White);
