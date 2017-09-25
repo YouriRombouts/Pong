@@ -25,9 +25,7 @@ namespace Pong
         Ball m_Ball;
         Song Music;
         Button PlayButton;
-        SoundEffect Ping;
-        SoundEffect Pong;
-        SoundEffect Pang2;
+        SoundEffect Ping, Pong, Pang2;
         string Winner;
 
         public class Ball
