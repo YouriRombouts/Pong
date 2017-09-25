@@ -319,10 +319,10 @@ namespace Pong
                     PlayButton.Draw(spriteBatch);   
                     break;
                 case Gamestate.Playing: 
-                    GraphicsDevice.Clear(Color.LightGreen);
+                    GraphicsDevice.Clear(Color.Black);
                     spriteBatch.DrawString(Font, m_Lives1.GetLivesStr(), new Vector2(graphics.GraphicsDevice.Viewport.Width / 4, 50), Color.Black);
                     spriteBatch.DrawString(Font, m_Lives2.GetLivesStr(), new Vector2(3*(graphics.GraphicsDevice.Viewport.Width / 4), 50), Color.Black);
-                    spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.Red);
+                    spriteBatch.Draw(m_BarShape1, m_Bar1.GetPos(), Color.White);
                     spriteBatch.Draw(m_BarShape2, m_Bar2.GetPos(), Color.White);
                     spriteBatch.Draw(m_BallShape, m_Ball.GetPos(), Color.White);
                     break;
