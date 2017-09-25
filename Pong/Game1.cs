@@ -243,12 +243,15 @@ namespace Pong
                         }
                         else
                         {
-                            m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                            m_Ball.SetVelX(-100);
-                            m_Lives1.RemoveOne();
-                            if (m_Lives1.GetLivesInt() == 0)
-                            {
-                                CurrentGameState = Gamestate.GameOver;
+                            if (m_Ball.GetPosX() <= -m_Ball.GetSize())
+                            { 
+                                m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
+                                m_Ball.SetVelX(-100);
+                                m_Lives1.RemoveOne();
+                                if (m_Lives1.GetLivesInt() == 0)
+                                {
+                                    CurrentGameState = Gamestate.GameOver;
+                                }   
                             }
                         }
                     }
@@ -260,12 +263,15 @@ namespace Pong
                         }
                         else
                         {
-                            m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                            m_Ball.SetVelX(100);
-                            m_Lives2.RemoveOne();
-                            if (m_Lives2.GetLivesInt() == 0)
+                            if (m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width)
                             {
-                                CurrentGameState = Gamestate.GameOver;
+                                m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
+                                m_Ball.SetVelX(100);
+                                m_Lives2.RemoveOne();
+                                if (m_Lives2.GetLivesInt() == 0)
+                                {
+                                    CurrentGameState = Gamestate.GameOver;
+                                }
                             }
                         }                     
                     }                                                                
