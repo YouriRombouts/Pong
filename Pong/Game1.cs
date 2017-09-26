@@ -258,7 +258,7 @@ namespace Pong
                             m_Ball.InverseVelX();
                             m_Ball.SetPosX(m_Bar1.GetWidth() + 1);
                             m_Ball.IncreaseVel();
-                            float DTM = ((m_Bar1.GetMiddlePos() - m_Ball.GetMidPos()) - m_Bar1.GetPosY()) / (-m_Bar1.GetHeight() / 2);
+                            float DTM = (m_Bar1.GetMiddlePos() - m_Ball.GetMidPos()) / (-m_Bar1.GetHeight() / 2);
                             m_Ball.ModVelY(DTM);
                             Ping.Play();
                         }
@@ -284,7 +284,7 @@ namespace Pong
                             m_Ball.InverseVelX();
                             m_Ball.SetPosX(graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth() - m_Ball.GetSize() - 1);
                             m_Ball.IncreaseVel();
-                            float DTM = ((m_Bar2.GetMiddlePos() - m_Ball.GetMidPos()) - m_Bar2.GetPosY()) / (-m_Bar2.GetHeight() / 2);
+                            float DTM = (m_Bar2.GetMiddlePos() - m_Ball.GetMidPos()) / (-m_Bar2.GetHeight() / 2);
                             m_Ball.ModVelY(DTM);
                             Pong.Play();
 
