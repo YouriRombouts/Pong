@@ -282,6 +282,7 @@ namespace Pong
                             if (m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width)
                             {
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
+                                m_Ball.SetVelX(150);
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
                                 {
