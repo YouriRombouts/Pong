@@ -27,7 +27,6 @@ namespace Pong
         Button Back;
         Button PlayButton;
         SoundEffect Ping, Pong, Pang2;
-        string Winner;
 
         public class Ball
         {            
@@ -234,6 +233,8 @@ namespace Pong
             {
                 case Gamestate.MainMenu:
                     Back.IsClicked = false;
+                    m_Lives1.Reset();
+                    m_Lives2.Reset();
                     if (PlayButton.IsClicked == true) CurrentGameState = Gamestate.Playing;
                     PlayButton.Update(mouse);
                     break;
@@ -263,7 +264,7 @@ namespace Pong
                                 m_Lives1.RemoveOne();
                                 if (m_Lives1.GetLivesInt() == 0)
                                 {
-                                    string Winner = "Player 2";
+                                    //string Winner = "Player 2";
                                     CurrentGameState = Gamestate.GameOver;
                                 }   
                             }
@@ -286,7 +287,7 @@ namespace Pong
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
                                 {
-                                    string Winner = "Player 1";
+                                    //string Winner = "Player 1";
                                     CurrentGameState = Gamestate.GameOver;
                                 }
                             }
@@ -317,9 +318,7 @@ namespace Pong
                     break;
                 case Gamestate.GameOver:
                     PlayButton.IsClicked = false;
-                    m_Ball.VelReset();
-                    m_Lives1.Reset();
-                    m_Lives2.Reset();
+                    m_Ball.VelReset();                    
                     if (Back.IsClicked == true)
                         CurrentGameState = Gamestate.MainMenu;
                         Back.Update(mouse);
@@ -354,7 +353,14 @@ namespace Pong
                     break;
                 case Gamestate.GameOver:
                     GraphicsDevice.Clear(Color.Red);
-                    spriteBatch.DrawString(Font, "The winner is: " + Winner, new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), Color.Green);
+                    if (m_Lives1.GetLivesInt() == 0)
+                    {
+                        spriteBatch.DrawString(Font, "The winner is: Player 2, with " + m_Lives2.GetLivesStr() + " lives left.", new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), Color.Green);
+                    }
+                    else if (m_Lives2.GetLivesInt() == 0)
+                    {
+                        spriteBatch.DrawString(Font, "The winner is: Player 1, with " + m_Lives1.GetLivesStr() + " lives left.", new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), Color.Green);
+                    }
                     Back.Draw(spriteBatch);
                     break;
             }
