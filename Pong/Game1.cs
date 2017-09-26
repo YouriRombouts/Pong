@@ -24,9 +24,7 @@ namespace Pong
         Lives m_Lives2;
         Ball m_Ball;
         Song Music;
-        Button Back;
-        Button PlayButton;
-        Button Options;
+        Button Back, PlayButton, Options, FullScreen;
         SoundEffect Ping, Pong, Pang2;
 
         public class Ball
@@ -110,7 +108,7 @@ namespace Pong
             public Button(Texture2D NewTexture ,GraphicsDevice graphics)
             {
                 Texture = NewTexture;
-                Size = new Vector2( graphics.Viewport.Width/8 , graphics.Viewport.Height / 25);
+                Size = new Vector2( graphics.Viewport.Width/6 , graphics.Viewport.Height / 18);
             }
 
             bool Down;
@@ -210,7 +208,8 @@ namespace Pong
             Back.Size = new Vector2(graphics.GraphicsDevice.Viewport.Width / 9, graphics.GraphicsDevice.Viewport.Height / 18);
             Back.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2 + 20));
             Options = new Button(Content.Load<Texture2D>("Options"), graphics.GraphicsDevice);
-            Options.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, (GraphicsDevice.Viewport.Height / 2 + 20) + 200));
+            Options.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, (GraphicsDevice.Viewport.Height / 2 + 20) + 10));
+            //Options = new Button(Content.Load<Texture2D>("Fullscreen"), graphics.GraphicsDevice);
             Ping = Content.Load<SoundEffect>("ping");
             Pong = Content.Load<SoundEffect>("pong");
             Pang2 = Content.Load<SoundEffect>("pang2");            
@@ -246,6 +245,8 @@ namespace Pong
                     m_Lives2.Reset();
                     if (PlayButton.IsClicked == true) CurrentGameState = Gamestate.Playing;
                     PlayButton.Update(mouse);
+                    if (Options.IsClicked == true) CurrentGameState = Gamestate.Options;
+                    Options.Update(mouse);
                     break;
                 case Gamestate.Options:
                     break;
