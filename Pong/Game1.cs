@@ -356,13 +356,13 @@ namespace Pong
                     if (m_Lives1.GetLivesInt() == 0)
                     {
                         string Text = ("The winner is: Player 1, with " + m_Lives1.GetLivesStr() + " lives left.");
-                        float StringLength = Font.MeasureString(text).X;
+                        float StringLength = Font.MeasureString(Text).X;
                         spriteBatch.DrawString(Font, Text, new Vector2(GraphicsDevice.Viewport.Width / 2 - (StringLength) / 2, GraphicsDevice.Viewport.Height / 2), Color.Green);
                     }
                     else if (m_Lives2.GetLivesInt() == 0)
                     {
                         string Text = ("The winner is: Player 1, with " + m_Lives1.GetLivesStr() + " lives left.");
-                        float StringLength = Font.MeasureString(text).X;
+                        float StringLength = Font.MeasureString(Text).X;
                         spriteBatch.DrawString(Font, Text, new Vector2(GraphicsDevice.Viewport.Width / 2 - (StringLength) / 2, GraphicsDevice.Viewport.Height / 2), Color.Green);
                     }
                     Back.Draw(spriteBatch);
