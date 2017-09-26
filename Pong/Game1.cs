@@ -33,24 +33,27 @@ namespace Pong
             int m_Size = 0;
             Vector2 m_Vel = new Vector2(0, 0);
             Vector2 m_Pos = new Vector2(0, 0);
+            int m_StartVelX = 150;
             public Ball(Vector2 Pos,int Size, Vector2 Vel) { m_Pos = Pos; m_Size = Size; m_Vel = Vel; }
             public int GetSize() { return m_Size; }
             public Vector2 GetPos() { return m_Pos; }
-            public int GetMidPos() { return (int)m_Pos.Y + m_Size/2; }
+            public float GetMidPos() { return m_Pos.Y + m_Size/2; }
             public void MoveVertical(int distance) { m_Pos.Y += distance; }
             public void MoveHorizontal(int distance) { m_Pos.X += distance; }
             public float GetPosY() { return m_Pos.Y; }
             public float GetPosX() { return m_Pos.X; }
             public float GetVelY() { return m_Vel.Y; }
             public float GetVelX() { return m_Vel.X; }
+            public int GetStartVelX() { return m_StartVelX; }
             public void SetPosX(float NewBallPosX) { m_Pos.X = NewBallPosX; }
             public void SetPosY(float NewBallPosY) { m_Pos.Y = NewBallPosY; }
             public void SetPos(Vector2 NewBallPos) { m_Pos = NewBallPos; }
             public void SetVelX(int NewVelX) { m_Vel.X = NewVelX; }
+            public void SetVelY(int NewVelY) { m_Vel.Y = NewVelY; }
             public void InverseVelX() { m_Vel.X *= -1; }
             public void InverseVelY() { m_Vel.Y *= -1; }
-            public void IncreaseVel() { m_Vel.X *= 1.3f; }
-            public void VelReset() { m_Vel = new Vector2(-150, 150); }
+            public void IncreaseVel() { m_Vel.X *= 1.1f; }
+            public void ModVelY(float DistanceToMid) { m_Vel.Y += 20 * DistanceToMid; }
         }
 
         public class Bar
@@ -71,6 +74,7 @@ namespace Pong
             public void SetPos(float NewPos) { m_Pos.Y = NewPos; }
             public void SetVel(float Vel) { m_Vel = Vel; }
             public float GetMaxVel() { return m_MaxVel; }
+            public float GetMiddlePos() { return m_Pos.Y + m_Height / 2; }
         }
         public class Lives
         {
@@ -167,7 +171,7 @@ namespace Pong
             // TODO: use this.Content to load your game content here
             m_Bar1 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
             m_Bar2 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
-            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2 (-150, 150));
+            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2 (150, 150));
             m_Lives1 = new Lives();
             m_Lives2 = new Lives();
             m_Bar1.MoveVertical(-(m_Bar1.GetHeight()) / 2);
@@ -254,6 +258,8 @@ namespace Pong
                             m_Ball.InverseVelX();
                             //m_Ball.SetPosX(m_Bar1.GetWidth() + 1);
                             m_Ball.IncreaseVel();
+                            float DTM = ((m_Bar1.GetMiddlePos() - m_Bar1.GetPosY()) - m_Ball.GetMidPos()) / (m_Bar1.GetHeight() / 2);
+                            m_Ball.ModVelY(DTM);
                             Ping.Play();
                         }
                         else
@@ -261,7 +267,8 @@ namespace Pong
                             if (m_Ball.GetPosX() <= -m_Ball.GetSize())
                             { 
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                                m_Ball.SetVelX(-150);
+                                m_Ball.SetVelX(-m_Ball.GetStartVelX());
+                                m_Ball.SetVelY(0);
                                 m_Lives1.RemoveOne();
                                 if (m_Lives1.GetLivesInt() == 0)
                                 {
@@ -277,14 +284,18 @@ namespace Pong
                             m_Ball.InverseVelX();
                             //m_Ball.SetPosX(graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth() - m_Ball.GetSize() - 1);
                             m_Ball.IncreaseVel();
+                            float DTM = ((m_Bar2.GetMiddlePos() - m_Bar2.GetPosY()) - m_Ball.GetMidPos()) / (-m_Bar2.GetHeight() / 2);
+                            m_Ball.ModVelY(DTM);
                             Pong.Play();
+
                         }
                         else
                         {
                             if (m_Ball.GetPosX() >= graphics.GraphicsDevice.Viewport.Width)
                             {
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
-                                m_Ball.SetVelX(150);
+                                m_Ball.SetVelX(m_Ball.GetStartVelX());
+                                m_Ball.SetVelY(0);
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
                                 {
@@ -317,8 +328,7 @@ namespace Pong
                     }
                     break;
                 case Gamestate.GameOver:
-                    PlayButton.IsClicked = false;
-                    m_Ball.VelReset();                    
+                    PlayButton.IsClicked = false;                    
                     if (Back.IsClicked == true)
                         CurrentGameState = Gamestate.MainMenu;
                         Back.Update(mouse);
@@ -352,18 +362,18 @@ namespace Pong
                     spriteBatch.Draw(m_BallShape, m_Ball.GetPos(), Color.White);
                     break;
                 case Gamestate.GameOver:
-                    GraphicsDevice.Clear(Color.Red);
+                    GraphicsDevice.Clear(Color.Black);
                     if (m_Lives1.GetLivesInt() == 0)
                     {
-                        string Text = ("The winner is: Player 1, with " + m_Lives1.GetLivesStr() + " lives left.");
+                        string Text = ("The winner is: Player 2, with " + m_Lives2.GetLivesStr() + " lives left.");
                         float StringLength = Font.MeasureString(Text).X;
-                        spriteBatch.DrawString(Font, Text, new Vector2(GraphicsDevice.Viewport.Width / 2 - (StringLength) / 2, GraphicsDevice.Viewport.Height / 2), Color.Green);
+                        spriteBatch.DrawString(Font, Text, new Vector2(GraphicsDevice.Viewport.Width / 2 - (StringLength) / 2, GraphicsDevice.Viewport.Height / 2), Color.White);
                     }
                     else if (m_Lives2.GetLivesInt() == 0)
                     {
                         string Text = ("The winner is: Player 1, with " + m_Lives1.GetLivesStr() + " lives left.");
                         float StringLength = Font.MeasureString(Text).X;
-                        spriteBatch.DrawString(Font, Text, new Vector2(GraphicsDevice.Viewport.Width / 2 - (StringLength) / 2, GraphicsDevice.Viewport.Height / 2), Color.Green);
+                        spriteBatch.DrawString(Font, Text, new Vector2(GraphicsDevice.Viewport.Width / 2 - (StringLength) / 2, GraphicsDevice.Viewport.Height / 2), Color.White);
                     }
                     Back.Draw(spriteBatch);
                     break;
