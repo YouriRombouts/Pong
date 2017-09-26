@@ -53,7 +53,7 @@ namespace Pong
             public void SetVelY(int NewVelY) { m_Vel.Y = NewVelY; }
             public void InverseVelX() { m_Vel.X *= -1; }
             public void InverseVelY() { m_Vel.Y *= -1; }
-            public void IncreaseVel() { m_Vel.X *= 1.1f; }
+            public void IncreaseVel() { m_Vel.X *= 1.1f; m_MaxVelY *= 1.1f; }
             public void ModVelY(float DistanceToMid) { m_Vel.Y = m_MaxVelY * DistanceToMid; }
         }
 
