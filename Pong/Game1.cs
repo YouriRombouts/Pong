@@ -26,6 +26,7 @@ namespace Pong
         Song Music;
         Button Back;
         Button PlayButton;
+        Button Options;
         SoundEffect Ping, Pong, Pang2;
 
         public class Ball
@@ -93,7 +94,7 @@ namespace Pong
             MainMenu,
             Options,
             Playing,
-            GameOver
+            GameOver,
         }
 
         Gamestate CurrentGameState = Gamestate.MainMenu;
@@ -208,7 +209,8 @@ namespace Pong
             Back = new Button(Content.Load<Texture2D>("Back"), graphics.GraphicsDevice);
             Back.Size = new Vector2(graphics.GraphicsDevice.Viewport.Width / 9, graphics.GraphicsDevice.Viewport.Height / 18);
             Back.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2 + 20));
-
+            Options = new Button(Content.Load<Texture2D>("Options"), graphics.GraphicsDevice);
+            Options.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, (GraphicsDevice.Viewport.Height / 2 + 20) + 200));
             Ping = Content.Load<SoundEffect>("ping");
             Pong = Content.Load<SoundEffect>("pong");
             Pang2 = Content.Load<SoundEffect>("pang2");            
@@ -244,6 +246,8 @@ namespace Pong
                     m_Lives2.Reset();
                     if (PlayButton.IsClicked == true) CurrentGameState = Gamestate.Playing;
                     PlayButton.Update(mouse);
+                    break;
+                case Gamestate.Options:
                     break;
                 case Gamestate.Playing:
                     if (Keyboard.GetState().IsKeyDown(Keys.S)) { m_Bar1.SetVel(m_Bar1.GetMaxVel()); }
@@ -354,7 +358,12 @@ namespace Pong
             {
                 case Gamestate.MainMenu:
                     spriteBatch.Draw(Content.Load<Texture2D>("Menu"), new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height) , Color.White);
-                    PlayButton.Draw(spriteBatch);   
+                    PlayButton.Draw(spriteBatch);
+                    Options.Draw(spriteBatch);   
+                    break;
+                case Gamestate.Options:
+                    spriteBatch.Draw(Content.Load<Texture2D>("Menu"), new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
+                    Back.Draw(spriteBatch);
                     break;
                 case Gamestate.Playing: 
                     GraphicsDevice.Clear(Color.Black);
