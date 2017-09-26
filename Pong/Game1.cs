@@ -33,7 +33,7 @@ namespace Pong
             int m_Size = 0;
             Vector2 m_Vel = new Vector2(0, 0);
             Vector2 m_Pos = new Vector2(0, 0);
-            int m_StartVelX = 150;
+            Vector2 m_StartVel = new Vector2(150, 100);
             float m_MaxVelY = 150;
             public Ball(Vector2 Pos,int Size, Vector2 Vel) { m_Pos = Pos; m_Size = Size; m_Vel = Vel; }
             public int GetSize() { return m_Size; }
@@ -45,12 +45,14 @@ namespace Pong
             public float GetPosX() { return m_Pos.X; }
             public float GetVelY() { return m_Vel.Y; }
             public float GetVelX() { return m_Vel.X; }
-            public int GetStartVelX() { return m_StartVelX; }
+            public float GetStartVelX() { return m_StartVel.X; }
+            public float GetStartVelY() { return m_StartVel.Y; }
             public void SetPosX(float NewBallPosX) { m_Pos.X = NewBallPosX; }
             public void SetPosY(float NewBallPosY) { m_Pos.Y = NewBallPosY; }
             public void SetPos(Vector2 NewBallPos) { m_Pos = NewBallPos; }
-            public void SetVelX(int NewVelX) { m_Vel.X = NewVelX; }
-            public void SetVelY(int NewVelY) { m_Vel.Y = NewVelY; }
+            public void SetVel(Vector2 NewVel) { m_Vel = NewVel; }
+            public void SetVelX(float NewVelX) { m_Vel.X = NewVelX; }
+            public void SetVelY(float NewVelY) { m_Vel.Y = NewVelY; }
             public void InverseVelX() { m_Vel.X *= -1; }
             public void InverseVelY() { m_Vel.Y *= -1; }
             public void IncreaseVel() { m_Vel.X *= 1.1f; m_MaxVelY *= 1.1f; }
@@ -172,13 +174,14 @@ namespace Pong
             // TODO: use this.Content to load your game content here
             m_Bar1 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
             m_Bar2 = new Bar(new Vector2(0, (graphics.GraphicsDevice.Viewport.Height / 2)));
-            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2 (150, 150));
+            m_Ball = new Ball(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)), 10, new Vector2 (0, 0));
             m_Lives1 = new Lives();
             m_Lives2 = new Lives();
             m_Bar1.MoveVertical(-(m_Bar1.GetHeight()) / 2);
             m_Bar2.MoveVertical(-(m_Bar2.GetHeight()) / 2);
             m_Ball.MoveVertical(-m_Ball.GetSize() / 2);
             m_Bar2.MoveHorizontal(graphics.GraphicsDevice.Viewport.Width-m_Bar2.GetWidth());
+            m_Ball.SetVel(new Vector2(m_Ball.GetStartVelX(), m_Ball.GetStartVelY()));
 
             Font = Content.Load<SpriteFont>("Score");
             m_Ball.MoveHorizontal(-m_Ball.GetSize() / 2);
@@ -268,7 +271,7 @@ namespace Pong
                             { 
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
                                 m_Ball.SetVelX(-m_Ball.GetStartVelX());
-                                m_Ball.SetVelY(0);
+                                m_Ball.SetVelY((float)(m_Bar1.GetMiddlePos()) - (graphics.GraphicsDevice.Viewport.Height / 2) / ((graphics.GraphicsDevice.Viewport.Width / 2) / m_Ball.GetStartVelX()));
                                 m_Lives1.RemoveOne();
                                 if (m_Lives1.GetLivesInt() == 0)
                                 {
@@ -295,7 +298,7 @@ namespace Pong
                             {
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
                                 m_Ball.SetVelX(m_Ball.GetStartVelX());
-                                m_Ball.SetVelY(0);
+                                m_Ball.SetVelY((float)(m_Bar2.GetMiddlePos()) - (graphics.GraphicsDevice.Viewport.Height / 2) / ((graphics.GraphicsDevice.Viewport.Width / 2) / m_Ball.GetStartVelX()));
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
                                 {
