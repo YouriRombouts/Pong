@@ -34,6 +34,7 @@ namespace Pong
             Vector2 m_Vel = new Vector2(0, 0);
             Vector2 m_Pos = new Vector2(0, 0);
             int m_StartVelX = 150;
+            float m_MaxVelY = 150;
             public Ball(Vector2 Pos,int Size, Vector2 Vel) { m_Pos = Pos; m_Size = Size; m_Vel = Vel; }
             public int GetSize() { return m_Size; }
             public Vector2 GetPos() { return m_Pos; }
@@ -53,7 +54,7 @@ namespace Pong
             public void InverseVelX() { m_Vel.X *= -1; }
             public void InverseVelY() { m_Vel.Y *= -1; }
             public void IncreaseVel() { m_Vel.X *= 1.1f; }
-            public void ModVelY(float DistanceToMid) { m_Vel.Y += 20 * DistanceToMid; }
+            public void ModVelY(float DistanceToMid) { m_Vel.Y = m_MaxVelY * DistanceToMid; }
         }
 
         public class Bar
@@ -207,8 +208,7 @@ namespace Pong
 
             Ping = Content.Load<SoundEffect>("ping");
             Pong = Content.Load<SoundEffect>("pong");
-            Pang2 = Content.Load<SoundEffect>("pang2");
-            //public bool Intersects(BoundingBox kaas);
+            Pang2 = Content.Load<SoundEffect>("pang2");            
         }
 
         /// <summary>
@@ -256,9 +256,9 @@ namespace Pong
                         if (m_Ball.GetMidPos() <= m_Bar1.GetPosY() + m_Bar1.GetHeight() && m_Ball.GetMidPos() >= m_Bar1.GetPosY())
                         {
                             m_Ball.InverseVelX();
-                            //m_Ball.SetPosX(m_Bar1.GetWidth() + 1);
+                            m_Ball.SetPosX(m_Bar1.GetWidth() + 1);
                             m_Ball.IncreaseVel();
-                            float DTM = ((m_Bar1.GetMiddlePos() - m_Bar1.GetPosY()) - m_Ball.GetMidPos()) / (m_Bar1.GetHeight() / 2);
+                            float DTM = ((m_Bar1.GetMiddlePos() - m_Ball.GetMidPos()) - m_Bar1.GetPosY()) / (-m_Bar1.GetHeight() / 2);
                             m_Ball.ModVelY(DTM);
                             Ping.Play();
                         }
@@ -282,9 +282,9 @@ namespace Pong
                         if (m_Ball.GetMidPos() <= m_Bar2.GetPosY() + m_Bar2.GetHeight() && m_Ball.GetMidPos() >= m_Bar2.GetPosY())
                         {
                             m_Ball.InverseVelX();
-                            //m_Ball.SetPosX(graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth() - m_Ball.GetSize() - 1);
+                            m_Ball.SetPosX(graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth() - m_Ball.GetSize() - 1);
                             m_Ball.IncreaseVel();
-                            float DTM = ((m_Bar2.GetMiddlePos() - m_Bar2.GetPosY()) - m_Ball.GetMidPos()) / (-m_Bar2.GetHeight() / 2);
+                            float DTM = ((m_Bar2.GetMiddlePos() - m_Ball.GetMidPos()) - m_Bar2.GetPosY()) / (-m_Bar2.GetHeight() / 2);
                             m_Ball.ModVelY(DTM);
                             Pong.Play();
 
