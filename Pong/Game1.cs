@@ -252,6 +252,7 @@ namespace Pong
                         if (m_Ball.GetMidPos() <= m_Bar1.GetPosY() + m_Bar1.GetHeight() && m_Ball.GetMidPos() >= m_Bar1.GetPosY())
                         {
                             m_Ball.InverseVelX();
+                            //m_Ball.SetPosX(m_Bar1.GetWidth() + 1);
                             m_Ball.IncreaseVel();
                             Ping.Play();
                         }
@@ -264,7 +265,6 @@ namespace Pong
                                 m_Lives1.RemoveOne();
                                 if (m_Lives1.GetLivesInt() == 0)
                                 {
-                                    //string Winner = "Player 2";
                                     CurrentGameState = Gamestate.GameOver;
                                 }   
                             }
@@ -275,6 +275,7 @@ namespace Pong
                         if (m_Ball.GetMidPos() <= m_Bar2.GetPosY() + m_Bar2.GetHeight() && m_Ball.GetMidPos() >= m_Bar2.GetPosY())
                         {
                             m_Ball.InverseVelX();
+                            //m_Ball.SetPosX(graphics.GraphicsDevice.Viewport.Width - m_Bar2.GetWidth() - m_Ball.GetSize() - 1);
                             m_Ball.IncreaseVel();
                             Pong.Play();
                         }
@@ -287,7 +288,6 @@ namespace Pong
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
                                 {
-                                    //string Winner = "Player 1";
                                     CurrentGameState = Gamestate.GameOver;
                                 }
                             }
