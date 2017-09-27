@@ -275,7 +275,7 @@ namespace Pong
                             { 
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
                                 m_Ball.SetVelX(-m_Ball.GetStartVelX());
-                                m_Ball.SetVelY((float)(m_Bar1.GetMiddlePos()) - (graphics.GraphicsDevice.Viewport.Height / 2) / ((graphics.GraphicsDevice.Viewport.Width / 2) / m_Ball.GetStartVelX()));
+                                m_Ball.SetVelY((float)(m_Bar1.GetMiddlePos() - (m_Ball.GetMidPos())) / ((graphics.GraphicsDevice.Viewport.Width / 2) / m_Ball.GetStartVelX()));
                                 m_Lives1.RemoveOne();
                                 if (m_Lives1.GetLivesInt() == 0)
                                 {
@@ -302,7 +302,7 @@ namespace Pong
                             {
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
                                 m_Ball.SetVelX(m_Ball.GetStartVelX());
-                                m_Ball.SetVelY((float)(m_Bar2.GetMiddlePos()) - (graphics.GraphicsDevice.Viewport.Height / 2) / ((graphics.GraphicsDevice.Viewport.Width / 2) / m_Ball.GetStartVelX()));
+                                m_Ball.SetVelY((float)(m_Bar2.GetMiddlePos() - (m_Ball.GetMidPos())) / ((graphics.GraphicsDevice.Viewport.Width / 2) / m_Ball.GetStartVelX()));
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
                                 {
