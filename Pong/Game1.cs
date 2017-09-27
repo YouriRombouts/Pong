@@ -195,8 +195,6 @@ namespace Pong
             m_BarShape2.SetData(data);
             m_BallShape.SetData(data);
 
-            Texture2D Heart = Content.Load<Texture2D>("Heart");
-
             Music = Content.Load<Song>("BeepBox-Song loop");
             MediaPlayer.Play(Music);
             MediaPlayer.IsRepeating = true;
@@ -248,18 +246,22 @@ namespace Pong
             {
                 case Gamestate.MainMenu:
                     Back.IsClicked = false;
+                    Full.IsClicked = false;
                     m_Lives1.Reset();
                     m_Lives2.Reset();
                     if (PlayButton.IsClicked == true) CurrentGameState = Gamestate.Playing;
                     PlayButton.Update(mouse);
-                    if (Options.IsClicked == true) CurrentGameState = Gamestate.Options;
+                    if (Options.IsClicked == true) { CurrentGameState = Gamestate.Options; }
                     Options.Update(mouse);
                     break;
                 case Gamestate.Options:
-                    Back.IsClicked = false;
-                    if (Full.IsClicked == true)  graphics.ToggleFullScreen();
+                    Options.IsClicked = false;
+                    if (Full.IsClicked == true)
+                    {
+                        graphics.ToggleFullScreen();
+                        CurrentGameState = Gamestate.MainMenu;
+                    }
                     Full.Update(mouse);
-                    Full.IsClicked = false;
                     if (Back.IsClicked == true)
                         CurrentGameState = Gamestate.MainMenu;
                     Back.Update(mouse);
