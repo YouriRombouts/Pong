@@ -110,7 +110,6 @@ namespace Pong
                 Texture = NewTexture;
                 Size = new Vector2( graphics.Viewport.Width/6 , graphics.Viewport.Height / 18);
             }
-
             bool Down;
             public bool IsClicked;
             public void Update(MouseState Mouse)
@@ -217,7 +216,8 @@ namespace Pong
 
             Ping = Content.Load<SoundEffect>("ping");
             Pong = Content.Load<SoundEffect>("pong");
-            Pang2 = Content.Load<SoundEffect>("pang2");            
+            Pang2 = Content.Load<SoundEffect>("pang2");       
+                 
         }
 
         /// <summary>
@@ -245,24 +245,23 @@ namespace Pong
             switch (CurrentGameState)
             {
                 case Gamestate.MainMenu:
-                    Back.IsClicked = false;
-                    Full.IsClicked = false;
+                    MouseState PrevMouseState = Mouse.GetState();
                     m_Lives1.Reset();
                     m_Lives2.Reset();
-                    if (PlayButton.IsClicked == true) CurrentGameState = Gamestate.Playing;
+                    if (PlayButton.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) CurrentGameState = Gamestate.Playing;
                     PlayButton.Update(mouse);
-                    if (Options.IsClicked == true) { CurrentGameState = Gamestate.Options; }
+                    if (Options.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) { CurrentGameState = Gamestate.Options; }
                     Options.Update(mouse);
                     break;
                 case Gamestate.Options:
-                    Options.IsClicked = false;
-                    if (Full.IsClicked == true)
+                    MouseState CurrentMouseState = Mouse.GetState();
+                    MouseState PrevMouseState2 = CurrentMouseState;
+                    if (Full.IsClicked == true && PrevMouseState2.LeftButton == ButtonState.Released && CurrentMouseState.LeftButton == ButtonState.Released)
                     {
                         graphics.ToggleFullScreen();
-                        CurrentGameState = Gamestate.MainMenu;
                     }
                     Full.Update(mouse);
-                    if (Back.IsClicked == true)
+                    if (Back.IsClicked == true && PrevMouseState2.LeftButton == ButtonState.Released)
                         CurrentGameState = Gamestate.MainMenu;
                     Back.Update(mouse);
                     break;
@@ -352,8 +351,8 @@ namespace Pong
                     }
                     break;
                 case Gamestate.GameOver:
-                    PlayButton.IsClicked = false;                    
-                    if (Back.IsClicked == true)
+                    MouseState PrevMouseState3 = Mouse.GetState();
+                    if (Back.IsClicked == true && PrevMouseState3.LeftButton == ButtonState.Released)
                         CurrentGameState = Gamestate.MainMenu;
                         Back.Update(mouse);
                     break;
