@@ -24,7 +24,7 @@ namespace Pong
         Lives m_Lives2;
         Ball m_Ball;
         Song Music;
-        Button Back, PlayButton, Options, FullScreen;
+        Button Back, PlayButton, Options, Full;
         SoundEffect Ping, Pong, Pang2;
 
         public class Ball
@@ -201,15 +201,22 @@ namespace Pong
             MediaPlayer.Play(Music);
             MediaPlayer.IsRepeating = true;
 
+
             IsMouseVisible = true;
+
             PlayButton = new Button(Content.Load<Texture2D>("Play") , graphics.GraphicsDevice);
             PlayButton.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2));
+
             Back = new Button(Content.Load<Texture2D>("Back"), graphics.GraphicsDevice);
             Back.Size = new Vector2(graphics.GraphicsDevice.Viewport.Width / 9, graphics.GraphicsDevice.Viewport.Height / 18);
-            Back.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2 + 20));
+            Back.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2 + 100));
+
             Options = new Button(Content.Load<Texture2D>("Options"), graphics.GraphicsDevice);
             Options.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, (GraphicsDevice.Viewport.Height / 2 + 20) + 10));
-            //Options = new Button(Content.Load<Texture2D>("Fullscreen"), graphics.GraphicsDevice);
+
+            Full = new Button(Content.Load<Texture2D>("Fullscreen"), graphics.GraphicsDevice);
+            Full.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2));
+
             Ping = Content.Load<SoundEffect>("ping");
             Pong = Content.Load<SoundEffect>("pong");
             Pang2 = Content.Load<SoundEffect>("pang2");            
@@ -249,6 +256,13 @@ namespace Pong
                     Options.Update(mouse);
                     break;
                 case Gamestate.Options:
+                    Back.IsClicked = false;
+                    if (Full.IsClicked == true)  graphics.ToggleFullScreen();
+                    Full.Update(mouse);
+                    Full.IsClicked = false;
+                    if (Back.IsClicked == true)
+                        CurrentGameState = Gamestate.MainMenu;
+                    Back.Update(mouse);
                     break;
                 case Gamestate.Playing:
                     if (Keyboard.GetState().IsKeyDown(Keys.S)) { m_Bar1.SetVel(m_Bar1.GetMaxVel()); }
@@ -360,10 +374,11 @@ namespace Pong
                 case Gamestate.MainMenu:
                     spriteBatch.Draw(Content.Load<Texture2D>("Menu"), new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height) , Color.White);
                     PlayButton.Draw(spriteBatch);
-                    Options.Draw(spriteBatch);   
+                    Options.Draw(spriteBatch);
                     break;
                 case Gamestate.Options:
                     spriteBatch.Draw(Content.Load<Texture2D>("Menu"), new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
+                    Full.Draw(spriteBatch);
                     Back.Draw(spriteBatch);
                     break;
                 case Gamestate.Playing: 
