@@ -259,7 +259,7 @@ namespace Pong
                     if (Full.IsClicked == true && PrevMouseState2.LeftButton == ButtonState.Released && CurrentMouseState.LeftButton == ButtonState.Released)
                     {
                         graphics.ToggleFullScreen();
-                        //Full.IsClicked = false;
+                        Full.IsClicked = false;
                     }
                     Full.Update(mouse);
                     if (Back.IsClicked == true && PrevMouseState2.LeftButton == ButtonState.Released)
