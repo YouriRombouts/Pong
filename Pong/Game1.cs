@@ -241,30 +241,28 @@ namespace Pong
 
             // TODO: Add your update logic here
             KeyboardState Keystate = Keyboard.GetState();
-            MouseState mouse = Mouse.GetState();
+            MouseState CurrentMouseState = Mouse.GetState();
+            MouseState PrevMouseState = CurrentMouseState;
             switch (CurrentGameState)
             {
                 case Gamestate.MainMenu:
-                    MouseState PrevMouseState = Mouse.GetState();
                     m_Lives1.Reset();
                     m_Lives2.Reset();
                     if (PlayButton.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) CurrentGameState = Gamestate.Playing;
-                    PlayButton.Update(mouse);
+                    PlayButton.Update(CurrentMouseState);
                     if (Options.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) { CurrentGameState = Gamestate.Options; }
-                    Options.Update(mouse);
+                    Options.Update(CurrentMouseState);
                     break;
                 case Gamestate.Options:
-                    MouseState CurrentMouseState = Mouse.GetState();
-                    MouseState PrevMouseState2 = CurrentMouseState;
-                    if (Full.IsClicked == true && PrevMouseState2.LeftButton == ButtonState.Released && CurrentMouseState.LeftButton == ButtonState.Released)
+                    if (Full.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released && CurrentMouseState.LeftButton == ButtonState.Released)
                     {
                         graphics.ToggleFullScreen();
                         Full.IsClicked = false;
                     }
-                    Full.Update(mouse);
-                    if (Back.IsClicked == true && PrevMouseState2.LeftButton == ButtonState.Released)
+                    Full.Update(CurrentMouseState);
+                    if (Back.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released)
                         CurrentGameState = Gamestate.MainMenu;
-                    Back.Update(mouse);
+                    Back.Update(CurrentMouseState);
                     break;
                 case Gamestate.Playing:
                     if (Keyboard.GetState().IsKeyDown(Keys.S)) { m_Bar1.SetVel(m_Bar1.GetMaxVel()); }
@@ -352,10 +350,11 @@ namespace Pong
                     }
                     break;
                 case Gamestate.GameOver:
+                    PlayButton.IsClicked = false;
                     MouseState PrevMouseState3 = Mouse.GetState();
                     if (Back.IsClicked == true && PrevMouseState3.LeftButton == ButtonState.Released)
                         CurrentGameState = Gamestate.MainMenu;
-                        Back.Update(mouse);
+                        Back.Update(CurrentMouseState);
                     break;
             }
 
