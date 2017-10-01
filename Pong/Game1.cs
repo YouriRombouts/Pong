@@ -250,6 +250,7 @@ namespace Pong
                 case Gamestate.MainMenu:
                     m_Lives1.Reset();
                     m_Lives2.Reset();
+                    Back.IsClicked = false;
                     if (PlayButton.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) CurrentGameState = Gamestate.Playing;
                     PlayButton.Update(CurrentMouseState);
                     //if (Options.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) { CurrentGameState = Gamestate.Options; }
