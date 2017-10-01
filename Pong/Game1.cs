@@ -24,7 +24,7 @@ namespace Pong
         Lives m_Lives2;
         Ball m_Ball;
         Song Music;
-        Button Back, PlayButton, Options, Full;
+        Button Back, PlayButton /*, Options, Full*/;
         SoundEffect Ping, Pong, Pang2;
 
         public class Ball
@@ -34,6 +34,7 @@ namespace Pong
             Vector2 m_Pos = new Vector2(0, 0);
             Vector2 m_StartVel = new Vector2(150, 100);
             float m_MaxVelY = 150;
+            float m_StartMaxVelY = 150;
             public Ball(Vector2 Pos,int Size, Vector2 Vel) { m_Pos = Pos; m_Size = Size; m_Vel = Vel; }
             public int GetSize() { return m_Size; }
             public Vector2 GetPos() { return m_Pos; }
@@ -45,13 +46,14 @@ namespace Pong
             public float GetVelY() { return m_Vel.Y; }
             public float GetVelX() { return m_Vel.X; }
             public float GetStartVelX() { return m_StartVel.X; }
-            public float GetStartVelY() { return m_StartVel.Y; }
+            public float GetStartVelY() { return m_StartMaxVelY; }
             public void SetPosX(float NewBallPosX) { m_Pos.X = NewBallPosX; }
             public void SetPosY(float NewBallPosY) { m_Pos.Y = NewBallPosY; }
             public void SetPos(Vector2 NewBallPos) { m_Pos = NewBallPos; }
             public void SetVel(Vector2 NewVel) { m_Vel = NewVel; }
             public void SetVelX(float NewVelX) { m_Vel.X = NewVelX; }
             public void SetVelY(float NewVelY) { m_Vel.Y = NewVelY; }
+            public void SetMaxVelY(float NewMaxVelY) { m_MaxVelY = NewMaxVelY; }
             public void InverseVelX() { m_Vel.X *= -1; }
             public void InverseVelY() { m_Vel.Y *= -1; }
             public void IncreaseVel() { m_Vel.X *= 1.1f; m_MaxVelY *= 1.1f; }
@@ -90,7 +92,7 @@ namespace Pong
         enum Gamestate
         {
             MainMenu,
-            Options,
+            //Options,
             Playing,
             GameOver,
         }
@@ -208,11 +210,11 @@ namespace Pong
             Back.Size = new Vector2(graphics.GraphicsDevice.Viewport.Width / 9, graphics.GraphicsDevice.Viewport.Height / 18);
             Back.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2 + 100));
 
-            Options = new Button(Content.Load<Texture2D>("Options"), graphics.GraphicsDevice);
-            Options.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, (GraphicsDevice.Viewport.Height / 2 + 20) + 10));
+            //Options = new Button(Content.Load<Texture2D>("Options"), graphics.GraphicsDevice);
+            //Options.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, (GraphicsDevice.Viewport.Height / 2 + 20) + 10));
 
-            Full = new Button(Content.Load<Texture2D>("Fullscreen"), graphics.GraphicsDevice);
-            Full.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2));
+            //Full = new Button(Content.Load<Texture2D>("Fullscreen"), graphics.GraphicsDevice);
+            //Full.SetPostion(new Vector2(GraphicsDevice.Viewport.Width / 2 - GraphicsDevice.Viewport.Width / 16, GraphicsDevice.Viewport.Height / 2));
 
             Ping = Content.Load<SoundEffect>("ping");
             Pong = Content.Load<SoundEffect>("pong");
@@ -250,10 +252,10 @@ namespace Pong
                     m_Lives2.Reset();
                     if (PlayButton.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) CurrentGameState = Gamestate.Playing;
                     PlayButton.Update(CurrentMouseState);
-                    if (Options.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) { CurrentGameState = Gamestate.Options; }
-                    Options.Update(CurrentMouseState);
+                    //if (Options.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released) { CurrentGameState = Gamestate.Options; }
+                    //Options.Update(CurrentMouseState);
                     break;
-                case Gamestate.Options:
+                /*case Gamestate.Options:
                     if (Full.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released && CurrentMouseState.LeftButton == ButtonState.Released)
                     {
                         graphics.ToggleFullScreen();
@@ -263,7 +265,7 @@ namespace Pong
                     if (Back.IsClicked == true && PrevMouseState.LeftButton == ButtonState.Released)
                         CurrentGameState = Gamestate.MainMenu;
                     Back.Update(CurrentMouseState);
-                    break;
+                    break;*/
                 case Gamestate.Playing:
                     if (Keyboard.GetState().IsKeyDown(Keys.S)) { m_Bar1.SetVel(m_Bar1.GetMaxVel()); }
                     if (Keyboard.GetState().IsKeyDown(Keys.W)) { m_Bar1.SetVel(-m_Bar1.GetMaxVel()); }
@@ -290,6 +292,7 @@ namespace Pong
                             { 
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
                                 m_Ball.SetVelX(-m_Ball.GetStartVelX());
+                                m_Ball.SetMaxVelY(m_Ball.GetStartVelY());
                                 m_Ball.SetVelY((float)(m_Bar1.GetMiddlePos() - (m_Ball.GetMidPos())) / ((graphics.GraphicsDevice.Viewport.Width / 2) / m_Ball.GetStartVelX()));
                                 m_Lives1.RemoveOne();
                                 if (m_Lives1.GetLivesInt() == 0)
@@ -317,6 +320,7 @@ namespace Pong
                             {
                                 m_Ball.SetPos(new Vector2((graphics.GraphicsDevice.Viewport.Width / 2), (graphics.GraphicsDevice.Viewport.Height / 2)));
                                 m_Ball.SetVelX(m_Ball.GetStartVelX());
+                                m_Ball.SetMaxVelY(m_Ball.GetStartVelY());
                                 m_Ball.SetVelY((float)(m_Bar2.GetMiddlePos() - (m_Ball.GetMidPos())) / ((graphics.GraphicsDevice.Viewport.Width / 2) / m_Ball.GetStartVelX()));
                                 m_Lives2.RemoveOne();
                                 if (m_Lives2.GetLivesInt() == 0)
@@ -375,13 +379,13 @@ namespace Pong
                 case Gamestate.MainMenu:
                     spriteBatch.Draw(Content.Load<Texture2D>("Menu"), new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height) , Color.White);
                     PlayButton.Draw(spriteBatch);
-                    Options.Draw(spriteBatch);
+                    //Options.Draw(spriteBatch);
                     break;
-                case Gamestate.Options:
+                /*case Gamestate.Options:
                     spriteBatch.Draw(Content.Load<Texture2D>("Menu"), new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height), Color.White);
                     Full.Draw(spriteBatch);
                     Back.Draw(spriteBatch);
-                    break;
+                    break;*/
                 case Gamestate.Playing: 
                     GraphicsDevice.Clear(Color.Black);
                     spriteBatch.DrawString(Font, m_Lives1.GetLivesStr(), new Vector2(graphics.GraphicsDevice.Viewport.Width / 4, 50), Color.White);
